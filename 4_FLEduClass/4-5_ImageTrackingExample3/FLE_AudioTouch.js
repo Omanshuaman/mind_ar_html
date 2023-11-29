@@ -8,7 +8,7 @@ document.addEventListener('DOMContentLoaded',() => {
         // initialize MindAR 
         const mindarThree = new MindARThree({
             container: document.body,
-            imageTargetSrc: './Target_1.mind', //bonjour
+            imageTargetSrc: './card.mind', //bonjour
           });
         const {renderer, scene, camera} = mindarThree;
 
