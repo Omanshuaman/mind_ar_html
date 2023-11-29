@@ -16,7 +16,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     //load 3d Model
     const gltf = await loadGLTF("../3dModels/Pizza flip animation.gltf");
-    gltf.scene.scale.set(1, 1, 1); // or any other scale factor you desire
+    gltf.scene.scale.set(0.9, 0.9, 0.9); // or any other scale factor you desire
     gltf.scene.rotation.set(0, 0, 0);
     gltf.scene.position.set(0, 0, 0.1);
 
