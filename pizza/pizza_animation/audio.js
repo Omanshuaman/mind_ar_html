@@ -11,8 +11,8 @@ document.addEventListener("DOMContentLoaded", () => {
     });
     const { renderer, scene, camera } = mindarThree;
 
-    // const light = new THREE.HemisphereLight(0xffffff, 0xbbbbff, 1);
-    // scene.add(light);
+    const light = new THREE.HemisphereLight(0xffffff, 0xbbbbff, 1);
+    scene.add(light);
 
     //load 3d Model
     const gltf = await loadGLTF("../3dModels/Pizza flip animation.gltf");
