@@ -6,40 +6,78 @@
     <script src="https://raw.githack.com/donmccurdy/aframe-extras/master/dist/aframe-extras.loaders.min.js"></script>
     <script src="https://raw.githack.com/AR-js-org/studio-backend/master/src/modules/marker/tools/gesture-detector.js"></script>
     <script src="https://raw.githack.com/AR-js-org/studio-backend/master/src/modules/marker/tools/gesture-handler.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.2.1/axios.min.js"></script>
   </head>
 
   <body style="margin: 0; overflow: hidden">
-    <a-scene
-      vr-mode-ui="enabled: false;"
-      loading-screen="enabled: false;"
-      renderer="logarithmicDepthBuffer: true;"
-      arjs="trackingMethod: best; sourceType: webcam; debugUIEnabled: false;"
-      id="scene"
-      embedded
-      gesture-detector>
-      <a-assets>
-        <a-asset-item id="animated-asset" src="assets/asset.glb"></a-asset-item>
-      </a-assets>
+    <!-- Create a variable to store the response data -->
+    <script>
+      let responseData;
 
-      <a-marker
-        id="animated-marker"
-        type="pattern"
-        preset="custom"
-        url="https://jobpostingbucket.s3.ap-south-1.amazonaws.com/markerPattern.patt"
-        raycaster="objects: .clickable"
-        emitevents="true"
-        cursor="fuse: false; rayOrigin: mouse;"
-        id="markerA">
-        <a-entity
-          id="bowser-model"
-          scale="2.078150572818595 2.078150572818595 2.078150572818595"
-          animation-mixer="loop: repeat"
-          gltf-model="#animated-asset"
-          class="clickable"
-          gesture-handler></a-entity>
-      </a-marker>
+      document.addEventListener("DOMContentLoaded", async () => {
+        // Get the ID from the URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const id = urlParams.get("id");
+        console.log("ID:", id);
 
-      <a-entity camera></a-entity>
-    </a-scene>
+        try {
+          // Make a GET request using Axios with the id parameter
+          const response = await axios.get(
+            `https://3ef9gn5kk2.execute-api.ap-south-1.amazonaws.com/arnxt_prod/ar-horizon/uploadtargetimage?id=${id}`
+          );
+          responseData = response.data;
+          console.log(responseData);
+
+          // Render the <a-scene> conditionally after receiving the data
+          renderAScene();
+        } catch (error) {
+          // Handle errors
+          console.error("Error fetching data:", error);
+        }
+      });
+
+      // Function to render the <a-scene> conditionally
+      function renderAScene() {
+        if (responseData) {
+          document.body.innerHTML += `
+            <a-scene
+              vr-mode-ui="enabled: false;"
+              loading-screen="enabled: false;"
+              renderer="logarithmicDepthBuffer: true;"
+              arjs="trackingMethod: best; sourceType: webcam; debugUIEnabled: false;"
+              id="scene"
+              embedded
+              gesture-detector
+            >
+              <a-assets>
+                <a-asset-item id="animated-asset" src="assets/asset.glb"></a-asset-item>
+              </a-assets>
+
+              <a-marker
+                id="animated-marker"
+                type="pattern"
+                preset="custom"
+                url="https://jobpostingbucket.s3.ap-south-1.amazonaws.com/markerPattern.patt"
+                raycaster="objects: .clickable"
+                emitevents="true"
+                cursor="fuse: false; rayOrigin: mouse;"
+                id="markerA"
+              >
+                <a-entity
+                  id="bowser-model"
+                  scale="2.078150572818595 2.078150572818595 2.078150572818595"
+                  animation-mixer="loop: repeat"
+                  gltf-model="#animated-asset"
+                  class="clickable"
+                  gesture-handler
+                ></a-entity>
+              </a-marker>
+
+              <a-entity camera></a-entity>
+            </a-scene>
+          `;
+        }
+      }
+    </script>
   </body>
 </html>
