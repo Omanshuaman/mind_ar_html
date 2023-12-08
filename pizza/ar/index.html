@@ -30,14 +30,11 @@
           console.error("Error fetching data:", error);
         }
       });
-      AFRAME.registerComponent("soundhandler", {
-        tick: function () {
-          var entity = document.querySelector("[sound]");
-          if (document.querySelector("a-marker").object3D.visible == true) {
-            entity.components.sound.playSound();
-          } else {
-            entity.components.sound.pauseSound();
-          }
+      AFRAME.registerComponent("foo", {
+        init: function () {
+          this.el.addEventListener("model-loaded", (e) => {
+            document.querySelector("#loadingEl").remove();
+          });
         },
       });
       function renderAScene() {
@@ -69,6 +66,8 @@
           cursor="fuse: false; rayOrigin: mouse;"
           id="markerA"
         >
+           <a-entity id='loadingEl'></a-entity>
+
           <a-entity
             id="bowser-model"
             scale="2.078150572818595 2.078150572818595 2.078150572818595"
