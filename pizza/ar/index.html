@@ -30,15 +30,15 @@
           console.error("Error fetching data:", error);
         }
       });
-      var m = document.getElementById("animated-marker");
-      var audio1 = new Audio("assets/AudioSource.mp3");
-      // var audio2=new Audio("assets/model2.mp3")
-      m.addEventListener("markerFound", (e) => {
-        audio1.play();
-      });
-
-      m.addEventListener("markerLost", (e) => {
-        audio1.pause();
+      AFRAME.registerComponent("soundhandler", {
+        tick: function () {
+          var entity = document.querySelector("[sound]");
+          if (document.querySelector("a-marker").object3D.visible == true) {
+            entity.components.sound.playSound();
+          } else {
+            entity.components.sound.pauseSound();
+          }
+        },
       });
       function renderAScene() {
         if (responseData) {
@@ -55,7 +55,9 @@
         <a-assets>
           <a-asset-item id="animated-asset" src="${responseData.TargetGlbFile}"></a-asset-item>
         </a-assets>
-
+ <a-assets>
+            <audio id="sound" src="assets/AudioSource.mp3" preload="auto"></audio>
+        </a-assets>
         <a-marker
           id="animated-marker"
           type="pattern"
