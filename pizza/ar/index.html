@@ -10,32 +10,36 @@
   </head>
 
   <body style="margin: 0; overflow: hidden">
-    <!-- Create a variable to store the response data -->
     <script>
       let responseData;
 
       document.addEventListener("DOMContentLoaded", async () => {
-        // Get the ID from the URL
         const urlParams = new URLSearchParams(window.location.search);
         const id = urlParams.get("id");
         console.log("ID:", id);
 
         try {
-          // Make a GET request using Axios with the id parameter
           const response = await axios.get(
             `https://3ef9gn5kk2.execute-api.ap-south-1.amazonaws.com/arnxt_prod/ar-horizon/uploadtargetimage?id=${id}`
           );
           responseData = response.data;
           console.log(responseData);
 
-          // Render the <a-scene> conditionally after receiving the data
           renderAScene();
         } catch (error) {
-          // Handle errors
           console.error("Error fetching data:", error);
         }
       });
+      var m = document.getElementById("animated-marker");
+      var audio1 = new Audio("assets/AudioSource.mp3");
+      // var audio2=new Audio("assets/model2.mp3")
+      m.addEventListener("markerFound", (e) => {
+        audio1.play();
+      });
 
+      m.addEventListener("markerLost", (e) => {
+        audio1.pause();
+      });
       function renderAScene() {
         if (responseData) {
           document.body.innerHTML += `
